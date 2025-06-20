@@ -240,14 +240,15 @@ rentalsMap[rental.customerId].push(rental);
 
       {/* Customer Detail Modal */}
 {/* Customer Detail Modal */}
-      {selectedCustomer && (
+{selectedCustomer && (
         <CustomerDetailModal
           customer={selectedCustomer}
           rentals={customerRentals[selectedCustomer.Id] || []}
           onClose={() => setSelectedCustomer(null)}
         />
+      )}
 
-{/* Add Customer Modal */}
+      {/* Add Customer Modal */}
       {showAddModal && (
         <AddCustomerModal
           onClose={() => setShowAddModal(false)}
