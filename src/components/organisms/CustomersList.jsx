@@ -10,13 +10,13 @@ import SearchBar from "@/components/molecules/SearchBar";
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
 import Badge from "@/components/atoms/Badge";
-import Customers from "@/components/pages/Customers";
 import rentalService from "@/services/api/rentalService";
 import customerService from "@/services/api/customerService";
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
 const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerRentals, setCustomerRentals] = useState({});
+  const [loading, setLoading] = useState(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
@@ -43,17 +43,18 @@ const [filteredCustomers, setFilteredCustomers] = useState([]);
         }
         rentalsMap[rental.customerId].push(rental);
       });
-
-      setCustomers(allCustomers);
+setCustomers(allCustomers);
       setFilteredCustomers(allCustomers);
       setCustomerRentals(rentalsMap);
     } catch (err) {
-setError(err.message || 'Failed to load customers');
+      setError(err.message || 'Failed to load customers');
+      setError(err.message || 'Failed to load customers');
       toast.error('Failed to load customers');
     } finally {
       setLoading(false);
     }
   };
+  
   const handleCustomerCreated = (newCustomer) => {
     setCustomers(prev => [...prev, newCustomer]);
     setFilteredCustomers(prev => [...prev, newCustomer]);
@@ -111,11 +112,10 @@ setError(err.message || 'Failed to load customers');
 
   return (
     <div className="space-y-6">
-      <SearchBar
+<SearchBar
         onSearch={handleSearch}
         placeholder="Search customers by name, email, or phone..."
-/>
-
+      />
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">
@@ -236,11 +236,12 @@ setError(err.message || 'Failed to load customers');
               </tbody>
             </table>
           </div>
-        </div>
-      )}
-{/* Customer Detail Modal would go here */}
+)}
+
+      {/* Customer Detail Modal */}
       {selectedCustomer && (
         <CustomerDetailModal
+          customer={selectedCustomer}
           customer={selectedCustomer}
           rentals={customerRentals[selectedCustomer.Id] || []}
           onClose={() => setSelectedCustomer(null)}
@@ -249,12 +250,13 @@ setError(err.message || 'Failed to load customers');
 
       {/* Add Customer Modal */}
       {showAddModal && (
-        <AddCustomerModal
+<AddCustomerModal
           onClose={() => setShowAddModal(false)}
           onSuccess={handleCustomerCreated}
         />
       )}
     </div>
+  );
 };
 
 // Simple Customer Detail Modal
@@ -339,9 +341,9 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
                     ))}
                   </div>
                 </div>
-              )}
+)}
             </div>
-</div>
+          </div>
 
           <div className="mt-6 flex justify-end">
             <Button onClick={onClose}>Close</Button>
