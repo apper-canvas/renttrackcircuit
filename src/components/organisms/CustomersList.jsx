@@ -13,12 +13,11 @@ import Badge from "@/components/atoms/Badge";
 import Customers from "@/components/pages/Customers";
 import rentalService from "@/services/api/rentalService";
 import customerService from "@/services/api/customerService";
-
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
-  const [filteredCustomers, setFilteredCustomers] = useState([]);
+const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerRentals, setCustomerRentals] = useState({});
-const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -49,13 +48,12 @@ const [loading, setLoading] = useState(true);
       setFilteredCustomers(allCustomers);
       setCustomerRentals(rentalsMap);
     } catch (err) {
-      setError(err.message || 'Failed to load customers');
+setError(err.message || 'Failed to load customers');
       toast.error('Failed to load customers');
-} finally {
+    } finally {
       setLoading(false);
     }
   };
-
   const handleCustomerCreated = (newCustomer) => {
     setCustomers(prev => [...prev, newCustomer]);
     setFilteredCustomers(prev => [...prev, newCustomer]);
@@ -116,9 +114,9 @@ const [loading, setLoading] = useState(true);
       <SearchBar
         onSearch={handleSearch}
         placeholder="Search customers by name, email, or phone..."
-      />
+/>
 
-<div className="flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">
             Customers ({filteredCustomers.length})
@@ -240,9 +238,8 @@ const [loading, setLoading] = useState(true);
           </div>
         </div>
       )}
-
-      {/* Customer Detail Modal would go here */}
-{selectedCustomer && (
+{/* Customer Detail Modal would go here */}
+      {selectedCustomer && (
         <CustomerDetailModal
           customer={selectedCustomer}
           rentals={customerRentals[selectedCustomer.Id] || []}
@@ -344,9 +341,9 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
                 </div>
               )}
             </div>
-          </div>
+</div>
 
-<div className="mt-6 flex justify-end">
+          <div className="mt-6 flex justify-end">
             <Button onClick={onClose}>Close</Button>
           </div>
         </div>
