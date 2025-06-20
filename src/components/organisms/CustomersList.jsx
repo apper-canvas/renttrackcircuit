@@ -17,7 +17,6 @@ const CustomersList = () => {
 const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerRentals, setCustomerRentals] = useState({});
   const [loading, setLoading] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -41,13 +40,13 @@ const [filteredCustomers, setFilteredCustomers] = useState([]);
         if (!rentalsMap[rental.customerId]) {
           rentalsMap[rental.customerId] = [];
         }
-        rentalsMap[rental.customerId].push(rental);
+rentalsMap[rental.customerId].push(rental);
       });
-setCustomers(allCustomers);
+
+      setCustomers(allCustomers);
       setFilteredCustomers(allCustomers);
       setCustomerRentals(rentalsMap);
     } catch (err) {
-      setError(err.message || 'Failed to load customers');
       setError(err.message || 'Failed to load customers');
       toast.error('Failed to load customers');
     } finally {
@@ -234,23 +233,23 @@ setCustomers(allCustomers);
                   );
                 })}
               </tbody>
-            </table>
+</table>
           </div>
-)}
+        </div>
+      )}
 
       {/* Customer Detail Modal */}
+{/* Customer Detail Modal */}
       {selectedCustomer && (
         <CustomerDetailModal
-          customer={selectedCustomer}
           customer={selectedCustomer}
           rentals={customerRentals[selectedCustomer.Id] || []}
           onClose={() => setSelectedCustomer(null)}
         />
-      )}
 
-      {/* Add Customer Modal */}
+{/* Add Customer Modal */}
       {showAddModal && (
-<AddCustomerModal
+        <AddCustomerModal
           onClose={() => setShowAddModal(false)}
           onSuccess={handleCustomerCreated}
         />
