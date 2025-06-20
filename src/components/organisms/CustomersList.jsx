@@ -1,25 +1,26 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import { format } from 'date-fns';
-import SearchBar from '../molecules/SearchBar';
-import Button from '../atoms/Button';
-import Badge from '../atoms/Badge';
-import ApperIcon from '../ApperIcon';
-import SkeletonLoader from '../molecules/SkeletonLoader';
-import EmptyState from '../molecules/EmptyState';
-import ErrorState from '../molecules/ErrorState';
-import customerService from '../../services/api/customerService';
-import rentalService from '../../services/api/rentalService';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { format } from "date-fns";
+import SearchBar from "@/components/molecules/SearchBar";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import ApperIcon from "@/components/ApperIcon";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import EmptyState from "@/components/molecules/EmptyState";
+import ErrorState from "@/components/molecules/ErrorState";
+import Input from "@/components/atoms/Input";
+import customerService from "@/services/api/customerService";
+import rentalService from "@/services/api/rentalService";
 
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerRentals, setCustomerRentals] = useState({});
-  const [loading, setLoading] = useState(true);
+const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-
+  const [showAddModal, setShowAddModal] = useState(false);
   useEffect(() => {
     loadCustomers();
   }, []);
@@ -49,11 +50,17 @@ const CustomersList = () => {
     } catch (err) {
       setError(err.message || 'Failed to load customers');
       toast.error('Failed to load customers');
-    } finally {
+} finally {
       setLoading(false);
     }
   };
 
+  const handleCustomerCreated = (newCustomer) => {
+    setCustomers(prev => [...prev, newCustomer]);
+    setFilteredCustomers(prev => [...prev, newCustomer]);
+    setShowAddModal(false);
+    toast.success('Customer created successfully');
+  };
   const handleSearch = async (searchTerm) => {
     if (!searchTerm) {
       setFilteredCustomers(customers);
@@ -110,7 +117,7 @@ const CustomersList = () => {
         placeholder="Search customers by name, email, or phone..."
       />
 
-      <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">
             Customers ({filteredCustomers.length})
@@ -119,6 +126,14 @@ const CustomersList = () => {
             Manage your customer database
           </p>
         </div>
+        <Button
+          onClick={() => setShowAddModal(true)}
+          variant="primary"
+          size="md"
+          icon="UserPlus"
+        >
+          Add Customer
+        </Button>
       </div>
 
       {filteredCustomers.length === 0 ? (
@@ -226,15 +241,22 @@ const CustomersList = () => {
       )}
 
       {/* Customer Detail Modal would go here */}
-      {selectedCustomer && (
+{selectedCustomer && (
         <CustomerDetailModal
           customer={selectedCustomer}
           rentals={customerRentals[selectedCustomer.Id] || []}
           onClose={() => setSelectedCustomer(null)}
         />
       )}
+
+      {/* Add Customer Modal */}
+      {showAddModal && (
+        <AddCustomerModal
+          onClose={() => setShowAddModal(false)}
+          onSuccess={handleCustomerCreated}
+        />
+      )}
     </div>
-  );
 };
 
 // Simple Customer Detail Modal
@@ -327,9 +349,178 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
             <Button onClick={onClose}>Close</Button>
           </div>
         </div>
-      </motion.div>
+</motion.div>
     </motion.div>
   );
 };
 
-export default CustomersList;
+// Add Customer Modal
+const AddCustomerModal = ({ onClose, onSuccess }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
+  });
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required';
+    }
+    
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Invalid email format';
+    }
+    
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone number is required';
+    }
+    
+    if (!formData.address.trim()) {
+      newErrors.address = 'Address is required';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setLoading(true);
+    
+    try {
+      const newCustomer = await customerService.create(formData);
+      onSuccess(newCustomer);
+    } catch (err) {
+      toast.error(err.message || 'Failed to create customer');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        className="bg-white rounded-lg shadow-xl max-w-md w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">Add New Customer</h2>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              disabled={loading}
+            >
+              <ApperIcon name="X" className="w-5 h-5" />
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name *
+              </label>
+              <Input
+                type="text"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                placeholder="Enter customer name"
+                error={errors.name}
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address *
+              </label>
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                placeholder="Enter email address"
+                error={errors.email}
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Phone Number *
+              </label>
+              <Input
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="Enter phone number"
+                error={errors.phone}
+                disabled={loading}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Address *
+              </label>
+              <Input
+                type="text"
+                value={formData.address}
+                onChange={(e) => handleInputChange('address', e.target.value)}
+                placeholder="Enter address"
+                error={errors.address}
+                disabled={loading}
+              />
+            </div>
+
+            <div className="flex justify-end space-x-3 pt-4">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={onClose}
+                disabled={loading}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                loading={loading}
+                disabled={loading}
+              >
+                {loading ? 'Creating...' : 'Create Customer'}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
