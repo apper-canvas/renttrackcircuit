@@ -1,0 +1,50 @@
+[
+  {
+    "Id": 1,
+    "customerId": 1,
+    "itemId": 2,
+    "startDate": "2024-01-25T00:00:00.000Z",
+    "dueDate": "2024-01-28T00:00:00.000Z",
+    "returnDate": null,
+    "totalPrice": 120,
+    "lateFee": 0,
+    "status": "active",
+    "notes": "Client requested specific alterations"
+  },
+  {
+    "Id": 2,
+    "customerId": 2,
+    "itemId": 5,
+    "startDate": "2024-01-24T00:00:00.000Z",
+    "dueDate": "2024-01-27T00:00:00.000Z",
+    "returnDate": null,
+    "totalPrice": 200,
+    "lateFee": 0,
+    "status": "active",
+    "notes": "Wedding guest attire"
+  },
+  {
+    "Id": 3,
+    "customerId": 3,
+    "itemId": 1,
+    "startDate": "2024-01-20T00:00:00.000Z",
+    "dueDate": "2024-01-23T00:00:00.000Z",
+    "returnDate": "2024-01-23T00:00:00.000Z",
+    "totalPrice": 150,
+    "lateFee": 0,
+    "status": "returned",
+    "notes": "Perfect condition on return"
+  },
+  {
+    "Id": 4,
+    "customerId": 1,
+    "itemId": 3,
+    "startDate": "2024-01-18T00:00:00.000Z",
+    "dueDate": "2024-01-21T00:00:00.000Z",
+    "returnDate": "2024-01-22T00:00:00.000Z",
+    "totalPrice": 80,
+    "lateFee": 15,
+    "status": "returned",
+    "notes": "Returned 1 day late"
+  }
+]
