@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
-import SearchBar from "@/components/molecules/SearchBar";
-import Button from "@/components/atoms/Button";
-import Badge from "@/components/atoms/Badge";
 import ApperIcon from "@/components/ApperIcon";
-import SkeletonLoader from "@/components/molecules/SkeletonLoader";
 import EmptyState from "@/components/molecules/EmptyState";
 import ErrorState from "@/components/molecules/ErrorState";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import SearchBar from "@/components/molecules/SearchBar";
+import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import customerService from "@/services/api/customerService";
+import Badge from "@/components/atoms/Badge";
+import Customers from "@/components/pages/Customers";
 import rentalService from "@/services/api/rentalService";
+import customerService from "@/services/api/customerService";
 
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
@@ -345,11 +346,11 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
             </div>
           </div>
 
-          <div className="mt-6 flex justify-end">
+<div className="mt-6 flex justify-end">
             <Button onClick={onClose}>Close</Button>
           </div>
         </div>
-</motion.div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -524,3 +525,5 @@ const AddCustomerModal = ({ onClose, onSuccess }) => {
     </motion.div>
   );
 };
+
+export default CustomersList;
