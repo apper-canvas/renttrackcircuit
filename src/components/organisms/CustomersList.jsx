@@ -291,10 +291,11 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Contact Information</h3>
-<div>
+              <div className="space-y-3">
+                <div>
                   <span className="text-gray-500">Name:</span>
                   <div className="font-medium">{customer.Name}</div>
                 </div>
@@ -315,9 +316,7 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
                   <div className="font-medium">{format(new Date(customer.join_date), 'MMM dd, yyyy')}</div>
                 </div>
               </div>
-              </div>
             </div>
-
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Rental Statistics</h3>
               <div className="grid grid-cols-2 gap-4">
