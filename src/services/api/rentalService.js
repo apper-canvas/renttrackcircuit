@@ -296,7 +296,7 @@ export const rentalService = {
     }
   },
 
-  async processReturn(id, returnData) {
+async processReturn(id, returnData) {
     try {
       const rental = await this.getById(id);
       const returnDate = new Date();
@@ -309,12 +309,19 @@ export const rentalService = {
         lateFee = daysLate * 15; // $15 per day late fee
       }
       
-      return await this.update(id, {
+      const updateData = {
         status: 'returned',
         return_date: returnDate.toISOString(),
         late_fee: lateFee,
         notes: returnData.notes || rental.notes
-      });
+      };
+      
+      // Include total price if provided (calculated total including late fees)
+      if (returnData.totalPrice !== undefined) {
+        updateData.total_price = returnData.totalPrice;
+      }
+      
+      return await this.update(id, updateData);
     } catch (error) {
       console.error("Error processing return:", error);
       throw error;

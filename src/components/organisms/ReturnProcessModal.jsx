@@ -27,14 +27,15 @@ const returnDate = new Date();
     { value: 'poor', label: 'Poor', description: 'Significant damage requiring repair' }
   ];
 
-  const handleProcessReturn = async () => {
+const handleProcessReturn = async () => {
     setLoading(true);
     
     try {
       // Process the return
       await rentalService.processReturn(rental.Id, {
         condition,
-        notes: notes || 'Item returned'
+        notes: notes || 'Item returned',
+        totalPrice: totalAmount
       });
       
       // Update item status back to available (or maintenance if condition is poor)
