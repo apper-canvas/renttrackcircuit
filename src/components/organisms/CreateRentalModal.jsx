@@ -113,10 +113,10 @@ const CreateRentalModal = ({ item, onClose, onSuccess }) => {
     }
   };
 
-  const filteredCustomers = customers.filter(customer =>
-    customer.name.toLowerCase().includes(customerSearch.toLowerCase()) ||
-    customer.email.toLowerCase().includes(customerSearch.toLowerCase()) ||
-    customer.phone.includes(customerSearch)
+const filteredCustomers = customers.filter(customer =>
+    (customer.name ?? '').toLowerCase().includes(customerSearch.toLowerCase()) ||
+    (customer.email ?? '').toLowerCase().includes(customerSearch.toLowerCase()) ||
+    (customer.phone ?? '').includes(customerSearch)
   );
 
   const totalPrice = item.rentalPrice * rentalDays;
