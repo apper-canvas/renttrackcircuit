@@ -5,7 +5,7 @@ import Button from '../atoms/Button';
 import ApperIcon from '../ApperIcon';
 
 const RentalCard = ({ rental, item, customer, onReturn, onView, className = '' }) => {
-const isOverdue = rental.dueDate && rental.status === 'active' && isAfter(new Date(), new Date(rental.dueDate));
+const isOverdue = rental.due_date && rental.status === 'active' && isAfter(new Date(), new Date(rental.due_date));
   
   const getStatusVariant = () => {
     if (isOverdue) return 'overdue';
@@ -55,14 +55,14 @@ const isOverdue = rental.dueDate && rental.status === 'active' && isAfter(new Da
           <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 mb-3">
             <div>
               <span className="text-gray-500">Due:</span>
-              <div className={`font-medium ${isOverdue ? 'text-red-600' : ''}`}>
-{rental.dueDate ? format(new Date(rental.dueDate), 'MMM dd, yyyy') : 'No due date'}
+<div className={`font-medium ${isOverdue ? 'text-red-600' : ''}`}>
+                {rental.due_date ? format(new Date(rental.due_date), 'MMM dd, yyyy') : 'No due date'}
               </div>
             </div>
             <div>
-              <span className="text-gray-500">Total:</span>
+<span className="text-gray-500">Total:</span>
               <div className="font-semibold text-primary">
-                ${rental.totalPrice + (rental.lateFee || 0)}
+                ${rental.total_price + (rental.late_fee || 0)}
               </div>
             </div>
           </div>
