@@ -16,9 +16,9 @@ const returnDate = new Date();
   const dueDate = rental.dueDate ? new Date(rental.dueDate) : new Date();
   const isValidDueDate = isValid(dueDate);
   const isOverdue = isValidDueDate && returnDate > dueDate;
-  const daysLate = isOverdue ? differenceInDays(returnDate, dueDate) : 0;
+const daysLate = isOverdue ? differenceInDays(returnDate, dueDate) : 0;
   const lateFee = daysLate * 15; // $15 per day late fee
-  const totalAmount = rental.totalPrice + lateFee;
+  const totalAmount = rental.total_price + lateFee;
 
   const conditionOptions = [
     { value: 'excellent', label: 'Excellent', description: 'No visible wear or damage' },
@@ -173,10 +173,10 @@ const handleProcessReturn = async () => {
             {/* Payment Summary */}
             <div className="bg-gray-50 rounded-lg p-4 mb-6">
               <h4 className="font-medium text-gray-900 mb-3">Payment Summary</h4>
-              <div className="space-y-2 text-sm">
+<div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span>Rental Fee:</span>
-                  <span>${rental.totalPrice}</span>
+                  <span>${rental.total_price}</span>
                 </div>
                 {isOverdue && (
                   <div className="flex justify-between text-red-600">
