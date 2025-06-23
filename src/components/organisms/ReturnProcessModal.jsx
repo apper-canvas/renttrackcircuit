@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import { format, differenceInDays } from 'date-fns';
+import { format, differenceInDays, isValid } from 'date-fns';
 import Button from '../atoms/Button';
 import ApperIcon from '../ApperIcon';
 import rentalService from '../../services/api/rentalService';
@@ -12,9 +12,10 @@ const ReturnProcessModal = ({ rental, item, customer, onClose, onSuccess }) => {
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const returnDate = new Date();
-  const dueDate = new Date(rental.dueDate);
-  const isOverdue = returnDate > dueDate;
+const returnDate = new Date();
+  const dueDate = rental.dueDate ? new Date(rental.dueDate) : new Date();
+  const isValidDueDate = isValid(dueDate);
+  const isOverdue = isValidDueDate && returnDate > dueDate;
   const daysLate = isOverdue ? differenceInDays(returnDate, dueDate) : 0;
   const lateFee = daysLate * 15; // $15 per day late fee
   const totalAmount = rental.totalPrice + lateFee;
@@ -96,12 +97,17 @@ const ReturnProcessModal = ({ rental, item, customer, onClose, onSuccess }) => {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="text-gray-500">Rental Date:</span>
-                  <div className="font-medium">{format(new Date(rental.startDate), 'MMM dd, yyyy')}</div>
+<div className="font-medium">
+                    {rental.startDate && isValid(new Date(rental.startDate)) 
+                      ? format(new Date(rental.startDate), 'MMM dd, yyyy')
+                      : 'Not set'
+                    }
+                  </div>
                 </div>
                 <div>
                   <span className="text-gray-500">Due Date:</span>
                   <div className={`font-medium ${isOverdue ? 'text-red-600' : ''}`}>
-                    {format(dueDate, 'MMM dd, yyyy')}
+{isValidDueDate ? format(dueDate, 'MMM dd, yyyy') : 'Not set'}
                   </div>
                 </div>
                 <div>
