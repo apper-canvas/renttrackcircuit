@@ -8,7 +8,7 @@ import ApperIcon from '../ApperIcon';
 import inventoryService from '../../services/api/inventoryService';
 
 const AddInventoryModal = ({ onClose, onSuccess }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: '',
     sku: '',
     brand: '',
@@ -21,6 +21,7 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
     weeklyRate: '',
     monthlyRate: '',
     status: 'available',
+    imageUrl: '',
     images: []
   });
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
   const conditions = ['excellent', 'good', 'fair'];
   const statuses = ['available', 'rented', 'maintenance'];
 
-  const validateForm = () => {
+const validateForm = () => {
     const newErrors = {};
 
     if (!formData.name.trim()) {
@@ -62,6 +63,13 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
 
     if (!formData.color.trim()) {
       newErrors.color = 'Color is required';
+    }
+
+    if (formData.imageUrl && formData.imageUrl.trim()) {
+      const urlPattern = /^https?:\/\/.+/i;
+      if (!urlPattern.test(formData.imageUrl.trim())) {
+        newErrors.imageUrl = 'Please enter a valid URL (must start with http:// or https://)';
+      }
     }
 
     if (!formData.dailyRate || isNaN(formData.dailyRate) || parseFloat(formData.dailyRate) <= 0) {
@@ -105,15 +113,16 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
 
     setLoading(true);
 
-    try {
+try {
       const itemData = {
         ...formData,
         dailyRate: parseFloat(formData.dailyRate),
         weeklyRate: parseFloat(formData.weeklyRate),
         monthlyRate: parseFloat(formData.monthlyRate),
-        images: formData.images.length > 0 ? formData.images : [
-          'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=400&fit=crop&crop=faces'
-        ]
+        images: formData.imageUrl.trim() ? [formData.imageUrl.trim()] : 
+                formData.images.length > 0 ? formData.images : [
+                  'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=300&h=400&fit=crop&crop=faces'
+                ]
       };
 
       await inventoryService.create(itemData);
@@ -182,7 +191,7 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
                     placeholder="Enter SKU"
                     required
                   />
-                  <Input
+<Input
                     label="Brand"
                     type="text"
                     value={formData.brand}
@@ -199,6 +208,17 @@ const AddInventoryModal = ({ onClose, onSuccess }) => {
                     error={errors.color}
                     placeholder="Enter color"
                     required
+                  />
+                </div>
+                <div className="mt-4">
+                  <Input
+                    label="Image URL"
+                    type="url"
+                    value={formData.imageUrl}
+                    onChange={(e) => handleInputChange('imageUrl', e.target.value)}
+                    error={errors.imageUrl}
+                    placeholder="https://example.com/image.jpg"
+                    icon="Image"
                   />
                 </div>
               </div>
