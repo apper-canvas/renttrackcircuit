@@ -5,7 +5,7 @@ import Button from '../atoms/Button';
 import ApperIcon from '../ApperIcon';
 
 const RentalCard = ({ rental, item, customer, onReturn, onView, className = '' }) => {
-  const isOverdue = isAfter(new Date(), new Date(rental.dueDate)) && rental.status === 'active';
+const isOverdue = rental.dueDate && rental.status === 'active' && isAfter(new Date(), new Date(rental.dueDate));
   
   const getStatusVariant = () => {
     if (isOverdue) return 'overdue';
@@ -56,7 +56,7 @@ const RentalCard = ({ rental, item, customer, onReturn, onView, className = '' }
             <div>
               <span className="text-gray-500">Due:</span>
               <div className={`font-medium ${isOverdue ? 'text-red-600' : ''}`}>
-                {format(new Date(rental.dueDate), 'MMM dd, yyyy')}
+{rental.dueDate ? format(new Date(rental.dueDate), 'MMM dd, yyyy') : 'No due date'}
               </div>
             </div>
             <div>
