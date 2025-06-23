@@ -89,15 +89,14 @@ const ActiveRentalsList = () => {
     );
   }
 
-  // Separate overdue and regular rentals
+// Separate overdue and regular rentals
   const currentDate = new Date();
   const overdueRentals = rentals.filter(rental => 
-    new Date(rental.dueDate) < currentDate
+    new Date(rental.due_date) < currentDate
   );
   const regularRentals = rentals.filter(rental => 
-    new Date(rental.dueDate) >= currentDate
+    new Date(rental.due_date) >= currentDate
   );
-
   return (
     <div className="space-y-6">
       {overdueRentals.length > 0 && (
@@ -115,7 +114,7 @@ const ActiveRentalsList = () => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
 transition={{ delay: index * 0.1 }}
-              >
+>
                 <RentalCard
                   rental={rental}
                   item={items[rental.item_id]}
@@ -143,7 +142,7 @@ transition={{ delay: index * 0.1 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
 transition={{ delay: index * 0.1 }}
-              >
+>
                 <RentalCard
                   rental={rental}
                   item={items[rental.item_id]}
