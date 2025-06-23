@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { format } from "date-fns";
-import ApperIcon from "@/components/ApperIcon";
-import EmptyState from "@/components/molecules/EmptyState";
-import ErrorState from "@/components/molecules/ErrorState";
-import SkeletonLoader from "@/components/molecules/SkeletonLoader";
-import SearchBar from "@/components/molecules/SearchBar";
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import Badge from "@/components/atoms/Badge";
 import rentalService from "@/services/api/rentalService";
 import customerService from "@/services/api/customerService";
+import ApperIcon from "@/components/ApperIcon";
+import Customers from "@/components/pages/Customers";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import EmptyState from "@/components/molecules/EmptyState";
+import SearchBar from "@/components/molecules/SearchBar";
+import ErrorState from "@/components/molecules/ErrorState";
+import Badge from "@/components/atoms/Badge";
+import Button from "@/components/atoms/Button";
+import Input from "@/components/atoms/Input";
 const CustomersList = () => {
   const [customers, setCustomers] = useState([]);
 const [filteredCustomers, setFilteredCustomers] = useState([]);
@@ -182,15 +183,15 @@ rentalsMap[rental.customerId].push(rental);
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+<div className="h-10 w-10 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
                               <span className="text-white font-medium text-sm">
-                                {customer.name.charAt(0).toUpperCase()}
+                                {customer.Name?.charAt(0).toUpperCase()}
                               </span>
                             </div>
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">
-                              {customer.name}
+                              {customer.Name}
                             </div>
                             <div className="text-sm text-gray-500">
                               ID: {customer.Id}
@@ -202,8 +203,8 @@ rentalsMap[rental.customerId].push(rental);
                         <div className="text-sm text-gray-900">{customer.email}</div>
                         <div className="text-sm text-gray-500">{customer.phone}</div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {format(new Date(customer.joinDate), 'MMM dd, yyyy')}
+<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {format(new Date(customer.join_date), 'MMM dd, yyyy')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">
@@ -293,10 +294,9 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold text-gray-900 mb-4">Contact Information</h3>
-              <div className="space-y-3 text-sm">
-                <div>
+<div>
                   <span className="text-gray-500">Name:</span>
-                  <div className="font-medium">{customer.name}</div>
+                  <div className="font-medium">{customer.Name}</div>
                 </div>
                 <div>
                   <span className="text-gray-500">Email:</span>
@@ -312,8 +312,9 @@ const CustomerDetailModal = ({ customer, rentals, onClose }) => {
                 </div>
                 <div>
                   <span className="text-gray-500">Member Since:</span>
-                  <div className="font-medium">{format(new Date(customer.joinDate), 'MMM dd, yyyy')}</div>
+                  <div className="font-medium">{format(new Date(customer.join_date), 'MMM dd, yyyy')}</div>
                 </div>
+              </div>
               </div>
             </div>
 

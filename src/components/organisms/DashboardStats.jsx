@@ -44,12 +44,12 @@ const DashboardStats = () => {
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       const monthlyRevenue = rentals
-        .filter(rental => {
-          const rentalDate = new Date(rental.startDate);
-          return rentalDate.getMonth() === currentMonth && 
+.filter(rental => {
+          const rentalDate = new Date(rental.start_date);
+          return rentalDate.getMonth() === currentMonth &&
                  rentalDate.getFullYear() === currentYear;
         })
-        .reduce((sum, rental) => sum + rental.totalPrice + (rental.lateFee || 0), 0);
+.reduce((sum, rental) => sum + rental.total_price + (rental.late_fee || 0), 0);
 
       setStats({
         totalItems: items.length,

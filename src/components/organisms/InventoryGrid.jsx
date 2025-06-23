@@ -3,15 +3,16 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import inventoryService from "@/services/api/inventoryService";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
-import ItemCard from "@/components/molecules/ItemCard";
-import SearchBar from "@/components/molecules/SearchBar";
+import Inventory from "@/components/pages/Inventory";
 import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import ItemCard from "@/components/molecules/ItemCard";
 import EmptyState from "@/components/molecules/EmptyState";
+import SearchBar from "@/components/molecules/SearchBar";
 import ErrorState from "@/components/molecules/ErrorState";
+import AddInventoryModal from "@/components/organisms/AddInventoryModal";
 import CreateRentalModal from "@/components/organisms/CreateRentalModal";
 import ItemDetailModal from "@/components/organisms/ItemDetailModal";
-import AddInventoryModal from "@/components/organisms/AddInventoryModal";
+import Button from "@/components/atoms/Button";
 const InventoryGrid = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -68,14 +69,9 @@ const InventoryGrid = () => {
       }
       
       setFilteredItems(results);
-    } catch (err) {
+} catch (err) {
       toast.error('Search failed');
     }
-  };
-
-  const handleRentItem = (item) => {
-    setSelectedItem(item);
-    setShowRentalModal(true);
   };
 
   const handleViewItem = (item) => {
@@ -83,7 +79,12 @@ const InventoryGrid = () => {
     setShowDetailModal(true);
   };
 
-const handleRentalCreated = () => {
+  const handleRentItem = (item) => {
+    setSelectedItem(item);
+    setShowRentalModal(true);
+  };
+
+  const handleRentalCreated = () => {
     setShowRentalModal(false);
     setSelectedItem(null);
     loadItems(); // Refresh to update item status

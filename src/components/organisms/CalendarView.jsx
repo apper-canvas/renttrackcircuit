@@ -1,14 +1,14 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths } from 'date-fns';
-import { toast } from 'react-toastify';
-import Button from '../atoms/Button';
-import Badge from '../atoms/Badge';
-import ApperIcon from '../ApperIcon';
-import SkeletonLoader from '../molecules/SkeletonLoader';
-import ErrorState from '../molecules/ErrorState';
-import rentalService from '../../services/api/rentalService';
-import inventoryService from '../../services/api/inventoryService';
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { addMonths, eachDayOfInterval, endOfMonth, format, isSameDay, startOfMonth, subMonths } from "date-fns";
+import { toast } from "react-toastify";
+import Button from "@/components/atoms/Button";
+import Badge from "@/components/atoms/Badge";
+import ApperIcon from "@/components/ApperIcon";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import ErrorState from "@/components/molecules/ErrorState";
+import rentalService from "@/services/api/rentalService";
+import inventoryService from "@/services/api/inventoryService";
 
 const CalendarView = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -52,17 +52,16 @@ const CalendarView = () => {
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
   const getRentalsForDay = (date) => {
-    return rentals.filter(rental => {
-      const startDate = new Date(rental.startDate);
-      const dueDate = new Date(rental.dueDate);
-      
+return rentals.filter(rental => {
+      const startDate = new Date(rental.start_date);
+      const dueDate = new Date(rental.due_date);
       return date >= startDate && date <= dueDate;
     });
   };
 
-  const getReturnsDueOnDay = (date) => {
+const getReturnsDueOnDay = (date) => {
     return rentals.filter(rental => {
-      return isSameDay(new Date(rental.dueDate), date) && rental.status === 'active';
+      return isSameDay(new Date(rental.due_date), date) && rental.status === 'active';
     });
   };
 
@@ -178,25 +177,25 @@ const CalendarView = () => {
                 
                 <div className="space-y-1">
                   {/* Active Rentals */}
-                  {dayRentals.slice(0, 2).map((rental) => (
+{dayRentals.slice(0, 2).map((rental) => (
                     <div
-                      key={rental.Id}
+                      key={rental.id}
                       className="text-xs p-1 bg-primary/10 text-primary rounded truncate"
-                      title={`${items[rental.itemId]?.name} - Active Rental`}
+                      title={`${items[rental.item_id]?.Name} - Active Rental`}
                     >
-                      {items[rental.itemId]?.name}
+                      {items[rental.item_id]?.Name}
                     </div>
                   ))}
                   
                   {/* Returns Due */}
-                  {returnsDue.slice(0, 2).map((rental) => (
+{returnsDue.slice(0, 2).map((rental) => (
                     <div
-                      key={`return-${rental.Id}`}
+                      key={rental.id}
                       className="text-xs p-1 bg-red-100 text-red-700 rounded truncate"
-                      title={`${items[rental.itemId]?.name} - Return Due`}
+                      title={`${items[rental.item_id]?.Name} - Return Due`}
                     >
                       <ApperIcon name="RotateCcw" className="w-3 h-3 inline mr-1" />
-                      {items[rental.itemId]?.name}
+                      {items[rental.item_id]?.Name}
                     </div>
                   ))}
                   
@@ -233,10 +232,10 @@ const CalendarView = () => {
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-red-100 rounded-lg">
               <ApperIcon name="AlertTriangle" className="w-5 h-5 text-red-600" />
-            </div>
+</div>
             <div>
               <div className="text-lg font-semibold text-gray-900">
-                {rentals.filter(r => r.status === 'active' && new Date(r.dueDate) < new Date()).length}
+                {rentals.filter(r => r.status === 'active' && new Date(r.due_date) < new Date()).length}
               </div>
               <div className="text-sm text-gray-600">Overdue Returns</div>
             </div>

@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ApperIcon from './components/ApperIcon';
+import Button from './components/atoms/Button';
 import { routeArray } from './config/routes';
-
+import { AuthContext } from './App';
 const Layout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { logout } = useContext(AuthContext);
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
@@ -44,9 +46,22 @@ const Layout = () => {
                   className="mr-3 flex-shrink-0 h-5 w-5"
                 />
                 {route.label}
-              </NavLink>
+</NavLink>
             ))}
           </nav>
+          
+          {/* Logout Button */}
+          <div className="px-4 py-4 border-t border-gray-200">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={logout}
+              icon="LogOut"
+              className="w-full"
+            >
+              Logout
+            </Button>
+          </div>
         </div>
       </aside>
 
@@ -110,9 +125,22 @@ const Layout = () => {
                       className="mr-3 flex-shrink-0 h-5 w-5"
                     />
                     {route.label}
-                  </NavLink>
+</NavLink>
                 ))}
               </nav>
+              
+              {/* Mobile Logout Button */}
+              <div className="px-4 py-4 border-t border-gray-200">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={logout}
+                  icon="LogOut"
+                  className="w-full"
+                >
+                  Logout
+                </Button>
+              </div>
             </div>
           </motion.aside>
         )}

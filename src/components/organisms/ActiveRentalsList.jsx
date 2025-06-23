@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import RentalCard from '../molecules/RentalCard';
-import SkeletonLoader from '../molecules/SkeletonLoader';
-import EmptyState from '../molecules/EmptyState';
-import ErrorState from '../molecules/ErrorState';
-import ReturnProcessModal from './ReturnProcessModal';
-import rentalService from '../../services/api/rentalService';
-import inventoryService from '../../services/api/inventoryService';
-import customerService from '../../services/api/customerService';
-
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import RentalCard from "@/components/molecules/RentalCard";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import EmptyState from "@/components/molecules/EmptyState";
+import ErrorState from "@/components/molecules/ErrorState";
+import ReturnProcessModal from "@/components/organisms/ReturnProcessModal";
+import rentalService from "@/services/api/rentalService";
+import inventoryService from "@/services/api/inventoryService";
+import customerService from "@/services/api/customerService";
 const ActiveRentalsList = () => {
   const [rentals, setRentals] = useState([]);
   const [items, setItems] = useState({});
@@ -115,14 +114,13 @@ const ActiveRentalsList = () => {
                 key={rental.Id}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
+transition={{ delay: index * 0.1 }}
               >
                 <RentalCard
                   rental={rental}
-                  item={items[rental.itemId]}
-                  customer={customers[rental.customerId]}
+                  item={items[rental.item_id]}
+                  customer={customers[rental.customer_id]}
                   onReturn={handleReturnItem}
-                  className="border-l-4 border-red-500"
                 />
               </motion.div>
             ))}
@@ -144,12 +142,12 @@ const ActiveRentalsList = () => {
                 key={rental.Id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
+transition={{ delay: index * 0.1 }}
               >
                 <RentalCard
                   rental={rental}
-                  item={items[rental.itemId]}
-                  customer={customers[rental.customerId]}
+                  item={items[rental.item_id]}
+                  customer={customers[rental.customer_id]}
                   onReturn={handleReturnItem}
                 />
               </motion.div>
@@ -158,12 +156,12 @@ const ActiveRentalsList = () => {
         </div>
       )}
 
-      {/* Return Process Modal */}
+{/* Return Process Modal */}
       {showReturnModal && selectedRental && (
         <ReturnProcessModal
           rental={selectedRental}
-          item={items[selectedRental.itemId]}
-          customer={customers[selectedRental.customerId]}
+          item={items[selectedRental.item_id]}
+          customer={customers[selectedRental.customer_id]}
           onClose={() => {
             setShowReturnModal(false);
             setSelectedRental(null);
