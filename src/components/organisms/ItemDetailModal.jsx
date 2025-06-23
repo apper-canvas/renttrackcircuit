@@ -90,10 +90,10 @@ const ItemDetailModal = ({ item, onClose }) => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Item Information */}
               <div>
-                <div className="aspect-w-3 aspect-h-4 mb-4">
+<div className="aspect-w-3 aspect-h-4 mb-4">
                   <img
-                    src={item.photoUrl}
-                    alt={item.name}
+                    src={item.photo_url}
+                    alt={item.Name}
                     className="w-full h-80 object-cover rounded-lg"
                     onError={(e) => {
                       e.target.src = 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=600&fit=crop';
@@ -101,8 +101,8 @@ const ItemDetailModal = ({ item, onClose }) => {
                   />
                 </div>
                 
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{item.name}</h3>
+<div className="flex items-center justify-between mb-4">
+                  <h3 className="text-2xl font-bold text-gray-900">{item.Name}</h3>
                   <Badge variant={getStatusVariant(item.status)} size="lg">
                     {item.status}
                   </Badge>
@@ -133,27 +133,27 @@ const ItemDetailModal = ({ item, onClose }) => {
                     <span className="text-gray-500">Condition:</span>
                     <span className="font-medium capitalize">{item.condition}</span>
                   </div>
-                  <div className="flex justify-between">
+<div className="flex justify-between">
                     <span className="text-gray-500">Purchase Price:</span>
-                    <span className="font-medium">${item.purchasePrice}</span>
+                    <span className="font-medium">${item.purchase_price}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Rental Price:</span>
-                    <span className="font-semibold text-primary">${item.rentalPrice}/day</span>
+                    <span className="font-semibold text-primary">${item.rental_price}/day</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">Date Added:</span>
-                    <span className="font-medium">{format(new Date(item.dateAdded), 'MMM dd, yyyy')}</span>
+                    <span className="font-medium">{format(new Date(item.date_added), 'MMM dd, yyyy')}</span>
                   </div>
                 </div>
 
                 {/* Current Rental Info */}
                 {currentRental && (
                   <div className="mt-6 p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                    <h4 className="font-semibold text-primary mb-2">Currently Rented</h4>
+<h4 className="font-semibold text-primary mb-2">Currently Rented</h4>
                     <div className="text-sm space-y-1">
-                      <div>Customer: {customers[currentRental.customerId]?.name}</div>
-                      <div>Due: {format(new Date(currentRental.dueDate), 'MMM dd, yyyy')}</div>
+                      <div>Customer: {customers[currentRental.customer_id]?.Name}</div>
+                      <div>Due: {format(new Date(currentRental.due_date), 'MMM dd, yyyy')}</div>
                     </div>
                   </div>
                 )}
@@ -187,10 +187,10 @@ const ItemDetailModal = ({ item, onClose }) => {
                           <div
                             key={rental.Id}
                             className="p-3 border border-gray-200 rounded-lg"
-                          >
+>
                             <div className="flex items-center justify-between mb-2">
                               <span className="font-medium text-gray-900">
-                                {customers[rental.customerId]?.name || 'Unknown Customer'}
+                                {customers[rental.customer_id]?.Name || 'Unknown Customer'}
                               </span>
                               <Badge 
                                 variant={rental.status === 'active' ? 'rented' : 'success'}
@@ -201,16 +201,16 @@ const ItemDetailModal = ({ item, onClose }) => {
                             </div>
                             <div className="text-xs text-gray-600 space-y-1">
                               <div className="flex justify-between">
-                                <span>Period:</span>
+<span>Period:</span>
                                 <span>
-                                  {format(new Date(rental.startDate), 'MMM dd')} - 
-                                  {format(new Date(rental.dueDate), 'MMM dd, yyyy')}
+                                  {format(new Date(rental.start_date), 'MMM dd')} - 
+                                  {format(new Date(rental.due_date), 'MMM dd, yyyy')}
                                 </span>
                               </div>
                               <div className="flex justify-between">
-                                <span>Amount:</span>
+<span>Amount:</span>
                                 <span className="font-medium">
-                                  ${rental.totalPrice + (rental.lateFee || 0)}
+                                  ${rental.total_price + (rental.late_fee || 0)}
                                 </span>
                               </div>
                               {rental.notes && (
