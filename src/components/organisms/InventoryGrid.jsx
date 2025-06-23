@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import ItemCard from '../molecules/ItemCard';
-import SearchBar from '../molecules/SearchBar';
-import SkeletonLoader from '../molecules/SkeletonLoader';
-import EmptyState from '../molecules/EmptyState';
-import ErrorState from '../molecules/ErrorState';
-import CreateRentalModal from './CreateRentalModal';
-import ItemDetailModal from './ItemDetailModal';
-import inventoryService from '../../services/api/inventoryService';
-
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import inventoryService from "@/services/api/inventoryService";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import ItemCard from "@/components/molecules/ItemCard";
+import SearchBar from "@/components/molecules/SearchBar";
+import SkeletonLoader from "@/components/molecules/SkeletonLoader";
+import EmptyState from "@/components/molecules/EmptyState";
+import ErrorState from "@/components/molecules/ErrorState";
+import CreateRentalModal from "@/components/organisms/CreateRentalModal";
+import ItemDetailModal from "@/components/organisms/ItemDetailModal";
+import AddInventoryModal from "@/components/organisms/AddInventoryModal";
 const InventoryGrid = () => {
   const [items, setItems] = useState([]);
   const [filteredItems, setFilteredItems] = useState([]);
@@ -18,6 +20,7 @@ const InventoryGrid = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showRentalModal, setShowRentalModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
   const [viewMode, setViewMode] = useState('grid');
 
   useEffect(() => {
@@ -80,11 +83,20 @@ const InventoryGrid = () => {
     setShowDetailModal(true);
   };
 
-  const handleRentalCreated = () => {
+const handleRentalCreated = () => {
     setShowRentalModal(false);
     setSelectedItem(null);
     loadItems(); // Refresh to update item status
     toast.success('Rental created successfully!');
+  };
+
+  const handleAddItem = () => {
+    setShowAddModal(true);
+  };
+
+  const handleItemAdded = () => {
+    setShowAddModal(false);
+    loadItems(); // Refresh to show new item
   };
 
   if (loading) {
@@ -143,7 +155,7 @@ const InventoryGrid = () => {
         filters={searchFilters}
       />
 
-      <div className="flex items-center justify-between">
+<div className="flex items-center justify-between">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">
             Inventory Items ({filteredItems.length})
@@ -153,23 +165,35 @@ const InventoryGrid = () => {
           </p>
         </div>
         
-        <div className="flex items-center space-x-2">
-          <button
-            onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}
+        <div className="flex items-center space-x-3">
+          <Button
+            variant="primary"
+            size="md"
+            onClick={handleAddItem}
+            className="flex items-center space-x-2"
           >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm12-2H4a3 3 0 00-3 3v12a3 3 0 003 3h12a3 3 0 003-3V4a3 3 0 00-3-3z" clipRule="evenodd" />
-            </svg>
-          </button>
-          <button
-            onClick={() => setViewMode('list')}
-            className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M3 4a1 1 0 000 2h14a1 1 0 100-2H3zm0 4a1 1 0 000 2h14a1 1 0 100-2H3zm0 4a1 1 0 000 2h14a1 1 0 100-2H3z" clipRule="evenodd" />
-            </svg>
-          </button>
+            <ApperIcon name="Plus" className="w-4 h-4" />
+            <span>Add Item</span>
+          </Button>
+          
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v12a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm12-2H4a3 3 0 00-3 3v12a3 3 0 003 3h12a3 3 0 003-3V4a3 3 0 00-3-3z" clipRule="evenodd" />
+              </svg>
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600'}`}
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3 4a1 1 0 000 2h14a1 1 0 100-2H3zm0 4a1 1 0 000 2h14a1 1 0 100-2H3zm0 4a1 1 0 000 2h14a1 1 0 100-2H3z" clipRule="evenodd" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -207,7 +231,7 @@ const InventoryGrid = () => {
         </motion.div>
       )}
 
-      {/* Modals */}
+{/* Modals */}
       {showRentalModal && selectedItem && (
         <CreateRentalModal
           item={selectedItem}
@@ -226,6 +250,13 @@ const InventoryGrid = () => {
             setShowDetailModal(false);
             setSelectedItem(null);
           }}
+        />
+      )}
+
+      {showAddModal && (
+        <AddInventoryModal
+          onClose={() => setShowAddModal(false)}
+          onSuccess={handleItemAdded}
         />
       )}
     </div>
