@@ -91,9 +91,9 @@ const CreateRentalModal = ({ item, onClose, onSuccess }) => {
       const rentalData = {
         customerId: selectedCustomer.Id,
         itemId: item.Id,
-        startDate: startDate.toISOString(),
+startDate: startDate.toISOString(),
         dueDate: dueDate.toISOString(),
-        totalPrice: item.rentalPrice * rentalDays,
+        totalPrice: item.rental_price * rentalDays,
         notes: notes
       };
 
@@ -117,11 +117,10 @@ const filteredCustomers = customers.filter(customer =>
     (customer.name ?? '').toLowerCase().includes(customerSearch.toLowerCase()) ||
     (customer.email ?? '').toLowerCase().includes(customerSearch.toLowerCase()) ||
     (customer.phone ?? '').includes(customerSearch)
-  );
+);
 
-  const totalPrice = item.rentalPrice * rentalDays;
+  const totalPrice = item.rental_price * rentalDays;
   const dueDate = addDays(new Date(), rentalDays);
-
   return (
     <AnimatePresence>
       <motion.div
@@ -158,9 +157,9 @@ const filteredCustomers = customers.filter(customer =>
                   className="w-20 h-24 object-cover rounded-lg"
                 />
                 <div>
-                  <h3 className="font-semibold text-gray-900">{item.name}</h3>
+<h3 className="font-semibold text-gray-900">{item.name}</h3>
                   <p className="text-sm text-gray-600">{item.sku} • {item.size} • {item.brand}</p>
-                  <p className="text-lg font-bold text-primary">${item.rentalPrice}/day</p>
+                  <p className="text-lg font-bold text-primary">${item.rental_price}/day</p>
                 </div>
               </div>
             </div>
@@ -318,9 +317,9 @@ const filteredCustomers = customers.filter(customer =>
               <div className="flex justify-between items-center">
                 <span className="text-lg font-medium text-gray-900">Total Amount:</span>
                 <span className="text-2xl font-bold text-primary">${totalPrice}</span>
-              </div>
+</div>
               <p className="text-sm text-gray-600 mt-1">
-                ${item.rentalPrice} × {rentalDays} day{rentalDays !== 1 ? 's' : ''}
+                ${item.rental_price} × {rentalDays} day{rentalDays !== 1 ? 's' : ''}
               </p>
             </div>
 
